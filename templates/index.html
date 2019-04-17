@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+   <body>
+      <div>
+         <input id="url" placeholder="URL">
+         <button onclick="shorten()">Shorten URL</button>
+      </div>
+      <div>
+         <input id="url2" placeholder="URL">
+         <input id="id" placeholder="ID">
+         <button onclick="replace()">Replace URL of ID</button>
+      </div>
+      <div>
+         <button onclick="remove_all()">Delete all</button>
+      </div>
+      <table border = 1>
+            <tr>
+               <td> ID </td>
+               <td> URL </td>
+               <td> Actions </td>
+            </tr>
+         {% for key, value in urls.items() %}
+            <tr>
+               <td> {{ key }} </td>
+               <td> {{ value }} </td>
+               <td> <button onclick="remove('{{ key }}')">Delete</button> </td>
+            </tr>
+         {% endfor %}
+      </table>
+   </body>
+</html>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+   function shorten(){
+      var url = document.querySelector("#url").value;
+
+      axios.post("?url="+url).then(function(){
+         document.location.reload();
+      }).catch(function(){
+         document.location.reload()
+      })
+   }
+
+   function replace(){
+      var url = document.querySelector("#url2").value;
+      var id = document.querySelector("#id").value;
+
+      axios.put("/"+id+"?url="+url).then(function(){
+         document.location.reload();
+      }).catch(function(){
+         document.location.reload()
+      })
+   }
+
+   function remove(id){
+      axios.delete("/"+id).then(function(){
+         document.location.reload();
+      }).catch(function(){
+         document.location.reload()
+      })
+   }
+
+   function remove_all(){
+      axios.delete("/").then(function(){
+         document.location.reload();
+      }).catch(function(){
+         document.location.reload()
+      })
+   }
+</script>
